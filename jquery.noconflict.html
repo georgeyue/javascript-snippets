@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Jquery.noconflict</title>
+</head>
+<body>
+
+  <script type="text/javascript" charset="utf-8">
+      function foo() { var meth = ['log', 'assert']; 
+          for(var i=0; i < meth.length; i++) { console[meth[i]].apply(console, arguments); }
+      }
+  </script>
+  <script src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
+  <script type="text/javascript" charset="utf-8">
+      console.log('included Prototype 1.7.1');
+      foo(Prototype.Version === '1.7.1', 'PrototypeJS is loaded');
+  </script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf-8">
+      console.log("include jQuery 1.6.4 script src");
+      foo($().jquery === '1.6.4', '$ var is jQuery 1.6.4');
+      foo(jQuery().jquery === '1.6.4', 'jQuery var is jQuery 1.6.4');
+
+      console.log('set noConflict()');
+
+      var jq164 = jQuery.noConflict();
+      foo(jq164().jquery === '1.6.4', 'jq164 var is jQuery 1.6.4');
+      foo($() === undefined, '$ var is not jQuery 1.6.4 anymore');
+  </script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf-8">
+      console.log("include jQuery 2.1.0 script src");
+      foo($().jquery === '2.1.0', 'var $ is jQuery 2.1.0');
+      foo(jQuery().jquery === '2.1.0', 'var jQuery is jQuery 2.1.0');
+
+      console.log('set noConflict(true)');
+      var jq2 = jQuery.noConflict(true);
+      foo($() === undefined, 'var $ is no longer jQuery 2.1.0');
+      foo(jQuery().jquery === '1.6.4', 'jQuery var is jQuery 1.6.4');
+      foo(jq164().jquery === '1.6.4', 'jq164 var is jQuery 1.6.4');
+      foo(jq2().jquery === '2.1.0', 'jq2 var is jQuery 2.1.0');
+  </script>
+
+</body>
+</html>
